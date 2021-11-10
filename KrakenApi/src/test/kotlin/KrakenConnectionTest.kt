@@ -7,7 +7,7 @@ import java.math.BigDecimal
 class KrakenConnectionTest {
     
     @Test
-    public fun testServerStatus(){
+    fun testServerStatus(){
         val connection = KrakenConnection()
         
         val response = connection.getServerStatus()
@@ -17,7 +17,7 @@ class KrakenConnectionTest {
     }
 
     @Test
-    public fun testTradablePairs(){
+    fun testTradablePairs(){
         val connection = KrakenConnection()
 
         val response = connection.getTradablePairs()
@@ -27,13 +27,13 @@ class KrakenConnectionTest {
     }
 
     @Test(expectedExceptions = [Exception::class])
-    public fun testTickException(){
+    fun testTickException(){
         val connection = KrakenConnection()
         connection.getTick(pair = TradablePair("USDBTC", "USD/BTC"), null)
     }
 
     @Test
-    public fun testTick(){
+    fun testTick(){
         val connection = KrakenConnection()
         val response = connection.getTick(pair = TradablePair("BATUSD", "BAT/USD"), null)
         Assert.assertNotNull(response)
@@ -43,7 +43,7 @@ class KrakenConnectionTest {
 
 
     @Test
-    public fun testBuy(){
+    fun testBuy(){
         val connection = KrakenConnection()
         val response = connection.buy(TradablePair("XXBTZUSD", "XXBTZ/USD"), BigDecimal(1), BigDecimal(2), BigDecimal(1))
 
@@ -51,9 +51,17 @@ class KrakenConnectionTest {
     }
 
     @Test
-    public fun testSell(){
+    fun testSell(){
         val connection = KrakenConnection()
         val response = connection.sell(TradablePair("XXBTZUSD", "XXBTZ/USD"), BigDecimal(1), BigDecimal(2))
+
+        Assert.assertNotNull(response)
+    }
+
+    @Test
+    fun testSocketToken(){
+        val connection = KrakenConnection()
+        val response = connection.getSocketAuth()
 
         Assert.assertNotNull(response)
     }

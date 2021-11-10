@@ -1,7 +1,5 @@
 package model.response
 
-import java.util.*
-
 class OrderResponse: KrakenResponse() {
 
     lateinit var descr:DetailedOrderData

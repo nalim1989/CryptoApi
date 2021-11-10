@@ -59,16 +59,29 @@ class KrakenConnection {
 
     private fun addOrder(params:Map<String,String>):OrderResponse{
         val orderUri="/AddOrder"
-        val uri = "$privateUri$orderUri"
+
+        val response = objectMapper.readValue(privateRequest(orderUri,params), OrderResponse::class.java)
+        return checkAndReturnResponse(response) as OrderResponse
+    }
+
+    fun getSocketAuth():KrakenSocketAuthResponse{
+        val orderUri="/GetWebSocketsToken"
+
+        val params = mapOf("nonce" to System.currentTimeMillis().toString())
+        val response = objectMapper.readValue(privateRequest(orderUri,params), KrakenSocketAuthResponse::class.java)
+        return checkAndReturnResponse(response) as KrakenSocketAuthResponse
+    }
+
+    private fun privateRequest(uriSuffix:String, params:Map<String,String>):String{
+        val uri = "$privateUri$uriSuffix"
 
         val body = UriRequestBuilder.build(params,mediaType)
 
         val headersMap = HashMap<String,String>(KrakenConstants.REST_HEADERS)
-        headersMap["API-Sign"]=KrakenSignatureCalculator.calculateSignature("$privateUriSuffix$orderUri",params)
+        headersMap["API-Sign"]=KrakenSignatureCalculator.calculateSignature("$privateUriSuffix$uriSuffix",params)
         val headers = HeadersBuilder.build(headersMap)
 
-        val response = objectMapper.readValue(connection.post(uri,body,headers), OrderResponse::class.java)
-        return checkAndReturnResponse(response) as OrderResponse
+        return connection.post(uri,body,headers)
     }
 
     private fun checkAndReturnResponse(response: KrakenResponse): KrakenResponse {

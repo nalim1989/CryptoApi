@@ -5,7 +5,6 @@ import connection.KrakenConnection
 import model.*
 import util.KrakenDataConverter
 import java.math.BigDecimal
-import kotlin.concurrent.thread
 
 class KrakenExchange:CryptoExchange {
 
