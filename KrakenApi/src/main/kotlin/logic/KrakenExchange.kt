@@ -1,14 +1,15 @@
 package logic
 
 import api.CryptoExchange
-import connection.KrakenConnection
+import connection.KrakenRestConnection
+import connection.KrakenSocketConnection
 import model.*
 import util.KrakenDataConverter
 import java.math.BigDecimal
 
 class KrakenExchange:CryptoExchange {
 
-    private val connection = KrakenConnection()
+    private val connection = KrakenRestConnection()
     private var listeners: MutableMap<TradablePair, Thread> =  HashMap()
 
     override fun getServerStatus(): ServerStatus {
@@ -36,7 +37,11 @@ class KrakenExchange:CryptoExchange {
         return Order(response.txid, pair, volume)
     }
 
-    fun subscribeToTick(pair:TradablePair, listener: TickListener){
+    fun socketSubscribeToTick(pair:TradablePair, listener: TickListener){
+
+    }
+
+    fun restSubscribeToTick(pair:TradablePair, listener: TickListener){
 
         val thread = Thread {
             var lastTickTime: String? =null
@@ -54,7 +59,7 @@ class KrakenExchange:CryptoExchange {
         thread.start()
     }
 
-    fun stopListeningToTick(pair:TradablePair){
+    fun stopRestListeningToTick(pair:TradablePair){
         try {
             listeners[pair]?.interrupt()
         } catch (e: Exception){
@@ -64,7 +69,7 @@ class KrakenExchange:CryptoExchange {
         listeners.remove(pair)
     }
 
-    fun stopAllListening(){
+    fun stopAllRestListening(){
         try {
             listeners.values.forEach{ thread -> thread.interrupt()}
         } catch (e:Exception){

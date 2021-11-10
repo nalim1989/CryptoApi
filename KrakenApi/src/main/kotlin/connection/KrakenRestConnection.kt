@@ -13,7 +13,7 @@ import util.UriRequestBuilder
 import java.math.BigDecimal
 
 
-class KrakenConnection {
+class KrakenRestConnection {
 
     private val baseUri = "https://api.kraken.com"
     private val privateUriSuffix = "/0/private"

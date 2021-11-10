@@ -1,14 +1,14 @@
-import connection.KrakenConnection
+import connection.KrakenRestConnection
 import model.TradablePair
 import org.testng.Assert
 import org.testng.annotations.Test
 import java.math.BigDecimal
 
-class KrakenConnectionTest {
+class KrakenRestConnectionTest {
     
     @Test
     fun testServerStatus(){
-        val connection = KrakenConnection()
+        val connection = KrakenRestConnection()
         
         val response = connection.getServerStatus()
         Assert.assertNotNull(response)
@@ -18,7 +18,7 @@ class KrakenConnectionTest {
 
     @Test
     fun testTradablePairs(){
-        val connection = KrakenConnection()
+        val connection = KrakenRestConnection()
 
         val response = connection.getTradablePairs()
         Assert.assertNotNull(response)
@@ -28,13 +28,13 @@ class KrakenConnectionTest {
 
     @Test(expectedExceptions = [Exception::class])
     fun testTickException(){
-        val connection = KrakenConnection()
+        val connection = KrakenRestConnection()
         connection.getTick(pair = TradablePair("USDBTC", "USD/BTC"), null)
     }
 
     @Test
     fun testTick(){
-        val connection = KrakenConnection()
+        val connection = KrakenRestConnection()
         val response = connection.getTick(pair = TradablePair("BATUSD", "BAT/USD"), null)
         Assert.assertNotNull(response)
 
@@ -44,7 +44,7 @@ class KrakenConnectionTest {
 
     @Test
     fun testBuy(){
-        val connection = KrakenConnection()
+        val connection = KrakenRestConnection()
         val response = connection.buy(TradablePair("XXBTZUSD", "XXBTZ/USD"), BigDecimal(1), BigDecimal(2), BigDecimal(1))
 
         Assert.assertNotNull(response)
@@ -52,7 +52,7 @@ class KrakenConnectionTest {
 
     @Test
     fun testSell(){
-        val connection = KrakenConnection()
+        val connection = KrakenRestConnection()
         val response = connection.sell(TradablePair("XXBTZUSD", "XXBTZ/USD"), BigDecimal(1), BigDecimal(2))
 
         Assert.assertNotNull(response)
@@ -60,7 +60,7 @@ class KrakenConnectionTest {
 
     @Test
     fun testSocketToken(){
-        val connection = KrakenConnection()
+        val connection = KrakenRestConnection()
         val response = connection.getSocketAuth()
 
         Assert.assertNotNull(response)

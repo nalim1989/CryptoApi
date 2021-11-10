@@ -1,4 +1,3 @@
-import connection.KrakenConnection
 import logic.KrakenExchange
 import model.Tick
 import model.TickListener
@@ -9,7 +8,7 @@ import org.testng.annotations.Test
 class KrakenExchangeTest: TickListener {
 
     @Test
-    public fun testTick(){
+    fun testTick(){
         val exchange = KrakenExchange()
 
         val response = exchange.getTick(TradablePair("BATUSD", "BAT/USD"), null)
@@ -17,12 +16,12 @@ class KrakenExchangeTest: TickListener {
     }
 
     @Test
-    public fun testSubscribe(){
+    fun testSubscribe(){
         val exchange = KrakenExchange()
 
-        exchange.subscribeToTick(TradablePair("BATUSD", "BAT/USD"), this)
+        exchange.restSubscribeToTick(TradablePair("BATUSD", "BAT/USD"), this)
         Thread.sleep(120000)
-        exchange.stopAllListening()
+        exchange.stopAllRestListening()
     }
 
     override fun acceptTicks(ticks: List<Tick>) {
