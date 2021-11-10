@@ -32,6 +32,11 @@ class KrakenExchange:CryptoExchange {
         return Order(response.txid, pair, volume)
     }
 
+    override fun sell(pair:TradablePair, volume:BigDecimal, price:BigDecimal): Order{
+        val response = connection.sell(pair,volume,price)
+        return Order(response.txid, pair, volume)
+    }
+
     fun subscribeToTick(pair:TradablePair, listener: TickListener){
 
         val thread = Thread {

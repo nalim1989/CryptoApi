@@ -2,13 +2,13 @@ package model.response
 
 import java.util.*
 
-class BuyResponse: KrakenResponse() {
+class OrderResponse: KrakenResponse() {
 
-    lateinit var descr:DetailedBuyData
+    lateinit var descr:DetailedOrderData
     lateinit var txid: String
 }
 
-class DetailedBuyData{
+class DetailedOrderData{
 
     lateinit var order:String
     lateinit var close:String

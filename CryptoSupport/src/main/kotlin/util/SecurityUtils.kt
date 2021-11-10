@@ -1,8 +1,6 @@
 package util
 
 import java.security.MessageDigest
-import java.util.*
-import javax.swing.Action.DEFAULT
 
 class SecurityUtils {
 

@@ -1,7 +1,6 @@
 package util
 
 import constants.KrakenConstants
-import java.math.BigInteger
 import java.nio.charset.StandardCharsets
 import java.util.*
 import javax.crypto.Mac
@@ -15,7 +14,7 @@ class KrakenSignatureCalculator {
             val nonce=data["nonce"]
             val flatData:String = data.flatMap { (key, value) -> listOf("$key=$value") }.joinToString("&")
 
-            val sha256Data=SecurityUtils.calculateSha256(nonce+flatData)
+            val sha256Data= SecurityUtils.calculateSha256(nonce+flatData)
 
             val decodedKeyBytes = Base64.getDecoder().decode(KrakenConstants.KRAKEN_PRIVATE_KEY)
 

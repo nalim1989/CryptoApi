@@ -49,4 +49,12 @@ class KrakenConnectionTest {
 
         Assert.assertNotNull(response)
     }
+
+    @Test
+    public fun testSell(){
+        val connection = KrakenConnection()
+        val response = connection.sell(TradablePair("XXBTZUSD", "XXBTZ/USD"), BigDecimal(1), BigDecimal(2))
+
+        Assert.assertNotNull(response)
+    }
 }

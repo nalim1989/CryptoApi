@@ -10,4 +10,5 @@ interface CryptoExchange {
     fun getServerStatus():ServerStatus
     fun getTradablePairs():List<TradablePair>
     fun buy(pair:TradablePair, volume:BigDecimal, limitPrice:BigDecimal, stopLossPrice:BigDecimal): Order
+    fun sell(pair:TradablePair, volume:BigDecimal, price:BigDecimal): Order
 }

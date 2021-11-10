@@ -4,10 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import constants.KrakenConstants
 import model.TradablePair
 import model.request.KrakenBuyRequest
-import model.response.BuyResponse
-import model.response.KrakenGenericResponse
-import model.response.KrakenResponse
-import model.response.KrakenServerStatusResponse
+import model.request.KrakenSellRequest
+import model.response.*
 import okhttp3.MediaType.Companion.toMediaType
 import util.HeadersBuilder
 import util.KrakenSignatureCalculator
@@ -18,8 +16,10 @@ import java.math.BigDecimal
 class KrakenConnection {
 
     private val baseUri = "https://api.kraken.com"
-    private val publicUri = "$baseUri/0/public"
-    private val privateUri = "$baseUri/0/private"
+    private val privateUriSuffix = "/0/private"
+    private val publicUriSuffix = "/0/public"
+    private val publicUri = "$baseUri$publicUriSuffix"
+    private val privateUri = "$baseUri$privateUriSuffix"
     private val mediaType = "application/x-www-form-urlencoded".toMediaType()
     private val connection: RestConnection = RestConnection()
     private val objectMapper = ObjectMapper()
@@ -47,19 +47,28 @@ class KrakenConnection {
         return checkAndReturnResponse(response) as KrakenGenericResponse
     }
 
-    fun buy(pair:TradablePair, volume:BigDecimal, limitPrice:BigDecimal, stopLossPrice:BigDecimal):BuyResponse{
-        val uri = "$privateUri/AddOrder"
-
+    fun buy(pair:TradablePair, volume:BigDecimal, limitPrice:BigDecimal, stopLossPrice:BigDecimal):OrderResponse{
         val params = KrakenBuyRequest.buildParamRequest(pair,volume,limitPrice,stopLossPrice)
+        return addOrder(params)
+    }
+
+    fun sell(pair:TradablePair, volume:BigDecimal, limitPrice:BigDecimal):OrderResponse{
+        val params = KrakenSellRequest.buildParamRequest(pair, volume, limitPrice)
+        return addOrder(params)
+    }
+
+    private fun addOrder(params:Map<String,String>):OrderResponse{
+        val orderUri="/AddOrder"
+        val uri = "$privateUri$orderUri"
+
         val body = UriRequestBuilder.build(params,mediaType)
 
         val headersMap = HashMap<String,String>(KrakenConstants.REST_HEADERS)
-        headersMap["API-Sign"]=KrakenSignatureCalculator.calculateSignature("/0/private/AddOrder",params)
+        headersMap["API-Sign"]=KrakenSignatureCalculator.calculateSignature("$privateUriSuffix$orderUri",params)
         val headers = HeadersBuilder.build(headersMap)
 
-        val response = objectMapper.readValue(connection.post(uri,body,headers), BuyResponse::class.java)
-        return checkAndReturnResponse(response) as BuyResponse
-
+        val response = objectMapper.readValue(connection.post(uri,body,headers), OrderResponse::class.java)
+        return checkAndReturnResponse(response) as OrderResponse
     }
 
     private fun checkAndReturnResponse(response: KrakenResponse): KrakenResponse {
