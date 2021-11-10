@@ -45,7 +45,7 @@ class KrakenConnectionTest {
     @Test
     public fun testBuy(){
         val connection = KrakenConnection()
-        val response = connection.buy(TradablePair("BATUSD", "BAT/USD"), BigDecimal(1), BigDecimal(2), BigDecimal(1))
+        val response = connection.buy(TradablePair("XXBTZUSD", "XXBTZ/USD"), BigDecimal(1), BigDecimal(2), BigDecimal(1))
 
         Assert.assertNotNull(response)
     }

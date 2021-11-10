@@ -1,7 +1,8 @@
 package connection
 
+import com.moczul.ok2curl.CurlInterceptor
+import com.moczul.ok2curl.logger.Loggable
 import okhttp3.*
-import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.logging.HttpLoggingInterceptor
 
 
@@ -13,6 +14,11 @@ class RestConnection {
         logging.level = (HttpLoggingInterceptor.Level.HEADERS)
         val clientBuilder = OkHttpClient.Builder()
         clientBuilder.addInterceptor(logging)
+
+        clientBuilder.addInterceptor(CurlInterceptor { message -> println(message) })
+            .build()
+
+
         client=clientBuilder.build()
     }
 

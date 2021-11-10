@@ -8,12 +8,10 @@ import model.response.BuyResponse
 import model.response.KrakenGenericResponse
 import model.response.KrakenResponse
 import model.response.KrakenServerStatusResponse
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.RequestBody
 import util.HeadersBuilder
 import util.KrakenSignatureCalculator
-import util.UriEncodedRequestBuilder
+import util.UriRequestBuilder
 import java.math.BigDecimal
 
 
@@ -22,6 +20,7 @@ class KrakenConnection {
     private val baseUri = "https://api.kraken.com"
     private val publicUri = "$baseUri/0/public"
     private val privateUri = "$baseUri/0/private"
+    private val mediaType = "application/x-www-form-urlencoded".toMediaType()
     private val connection: RestConnection = RestConnection()
     private val objectMapper = ObjectMapper()
 
@@ -49,11 +48,12 @@ class KrakenConnection {
     }
 
     fun buy(pair:TradablePair, volume:BigDecimal, limitPrice:BigDecimal, stopLossPrice:BigDecimal):BuyResponse{
-        var uri = "$privateUri/AddOrder"
+        val uri = "$privateUri/AddOrder"
 
         val params = KrakenBuyRequest.buildParamRequest(pair,volume,limitPrice,stopLossPrice)
-        val body = UriEncodedRequestBuilder.build(params)
-        var headersMap = HashMap<String,String>(KrakenConstants.REST_HEADERS)
+        val body = UriRequestBuilder.build(params,mediaType)
+
+        val headersMap = HashMap<String,String>(KrakenConstants.REST_HEADERS)
         headersMap["API-Sign"]=KrakenSignatureCalculator.calculateSignature("/0/private/AddOrder",params)
         val headers = HeadersBuilder.build(headersMap)
 

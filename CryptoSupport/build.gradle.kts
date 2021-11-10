@@ -10,6 +10,7 @@ version = "1.0-SNAPSHOT"
 dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.9.2")
     implementation ("com.squareup.okhttp3:logging-interceptor:4.9.2")
+    implementation ("com.github.mrmike:ok2curl:0.7.0")
 
     testImplementation(kotlin("test"))
 }

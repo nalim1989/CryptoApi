@@ -8,7 +8,7 @@ import java.sql.Date
 class KrakenBuyRequest{
     companion object {
         fun buildParamRequest(pair: TradablePair, volume:BigDecimal, price:BigDecimal, stopLossPrice:BigDecimal) : Map<String,String> {
-            val uriParams = HashMap<String,String>()
+            val uriParams = LinkedHashMap<String,String>()
 
             uriParams["nonce"] = currentTimeMillis().toString()
             uriParams["pair"] = pair.name

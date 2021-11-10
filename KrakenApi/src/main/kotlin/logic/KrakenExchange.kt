@@ -2,11 +2,9 @@ package logic
 
 import api.CryptoExchange
 import connection.KrakenConnection
-import model.ServerStatus
-import model.Tick
-import model.TickListener
-import model.TradablePair
+import model.*
 import util.KrakenDataConverter
+import java.math.BigDecimal
 import kotlin.concurrent.thread
 
 class KrakenExchange:CryptoExchange {
@@ -27,6 +25,11 @@ class KrakenExchange:CryptoExchange {
     fun getTick(pair:TradablePair, last:String?): List<Tick> {
         val response = connection.getTick(pair, last)
         return KrakenDataConverter.convertKrakenDataToTick(response)
+    }
+
+    override fun buy(pair:TradablePair, volume: BigDecimal, limitPrice: BigDecimal, stopLossPrice: BigDecimal):Order{
+        val response = connection.buy(pair,volume,limitPrice,stopLossPrice)
+        return Order(response.txid, pair, volume)
     }
 
     fun subscribeToTick(pair:TradablePair, listener: TickListener){

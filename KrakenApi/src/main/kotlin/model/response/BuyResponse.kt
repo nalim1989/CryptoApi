@@ -5,7 +5,7 @@ import java.util.*
 class BuyResponse: KrakenResponse() {
 
     lateinit var descr:DetailedBuyData
-    lateinit var txid: Date
+    lateinit var txid: String
 }
 
 class DetailedBuyData{
